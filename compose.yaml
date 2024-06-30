@@ -1,0 +1,24 @@
+version: '3.8'
+services:
+  dummy_frontend:
+    build: 
+      dockerfile: dummy_frontend/dockerfile
+    ports:
+      - 8080:80
+    depends_on:
+      - text_extractor
+  text_extractor:
+    container_name: text-extractor
+    build: 
+      dockerfile: text_extractor/dockerfile
+    ports:
+      - "5040:5040"
+  mongodb:
+    image: mongodb/mongodb-community-server:6.0-ubi8
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=user
+      - MONGO_INITDB_ROOT_PASSWORD=pass
+    volumes:
+      - type: bind
+        source: ./data
+        target: /data/db
